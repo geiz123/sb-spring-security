@@ -13,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * Allow all access
  */
 @Profile("dev")
-@Configuration
+@Configuration 
 public class DevSecurityConfig {
 
     Logger logger = LoggerFactory.getLogger(DevSecurityConfig.class);
