@@ -18,6 +18,14 @@
             "mainClass": "com.example.demo.DemoSecurityApplication",
             "projectName": "demo-security",
             "vmArgs": "-Dspring.profiles.active=dev"
+        },
+        {
+            "type": "java",
+            "name": "not dev",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoSecurityApplication",
+            "projectName": "demo-security",
+            "vmArgs": ""
         }
     ]
 }

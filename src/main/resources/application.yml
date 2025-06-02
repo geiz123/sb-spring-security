@@ -1,3 +1,9 @@
 spring:
   application:
     name: "demo-security"
+
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
