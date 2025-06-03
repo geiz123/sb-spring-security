@@ -3,6 +3,7 @@ package com.example.demo.ctrl;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,9 +15,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CtrlOne {
 
+    private JdbcTemplate jdbcTemplate;
+
     @GetMapping("/hello/{id}")
     public String one(@PathVariable Long id) {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+        Integer i = jdbcTemplate.queryForObject("SELECT count(*) FROM INFORMATION_SCHEMA.USERS", Integer.class);
+
+        return i + " - " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
     }
 
     @PostMapping("/bye")
