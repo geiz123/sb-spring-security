@@ -49,14 +49,14 @@ public class SecurityConfig {
         // Disable form login
         // http.formLogin(AbstractHttpConfigurer::disable);
 
-        http.authorizeHttpRequests(request -> request.requestMatchers("/error").permitAll());
+        http.authorizeHttpRequests(request -> request.requestMatchers("/error", "/test.html", "/favicon.ico","/logout").permitAll());
         // Enable authentication filter for all request
         // http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
 
         http.authorizeHttpRequests(request -> request.requestMatchers("/hello/**").hasAnyRole("ADMIN"));
         
-        logger.error("AHAHA {}", authenticationConfiguration);
-        logger.error("AHAHA2 {}", authenticationConfiguration.getAuthenticationManager());
+        // logger.error("AHAHA {}", authenticationConfiguration);
+        // logger.error("AHAHA2 {}", authenticationConfiguration.getAuthenticationManager());
 
         // Replace BasicAuthenticationFilter with ours
         http.addFilterAt(new XBasicAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(),

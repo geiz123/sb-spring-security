@@ -12,4 +12,4 @@ logging:
         security: TRACE
     com:
       zaxxer:
-        hikari: TRACE
+        hikari: INFO

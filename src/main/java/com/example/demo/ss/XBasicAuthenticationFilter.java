@@ -23,19 +23,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Create your own class if you want to redirect else where when exception happens
+ * Create your own class if you want to redirect else where when exception
+ * happens
  * https://howtodoinjava.com/spring-security/http-basic-authentication-example/
  */
 public class XBasicAuthenticationFilter extends BasicAuthenticationFilter {
-    
+
     private SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder
             .getContextHolderStrategy();
     private RememberMeServices rememberMeServices = new NullRememberMeServices();
-	private boolean ignoreFailure = false;
-	private SecurityContextRepository securityContextRepository = new RequestAttributeSecurityContextRepository();
+    private boolean ignoreFailure = false;
+    private SecurityContextRepository securityContextRepository = new RequestAttributeSecurityContextRepository();
     private AuthenticationEntryPoint authenticationEntryPoint;
-    
-    public XBasicAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint) {
+
+    public XBasicAuthenticationFilter(AuthenticationManager authenticationManager,
+            AuthenticationEntryPoint authenticationEntryPoint) {
         super(authenticationManager, authenticationEntryPoint);
     }
 
@@ -44,24 +46,32 @@ public class XBasicAuthenticationFilter extends BasicAuthenticationFilter {
             throws IOException, ServletException {
         try {
 
-            // TODO Get the key and create a UsernamePasswordAuthenticationToken
+            // Spring will ALWAYS call this filter for EVERY request. To avoid it, we put a
+            // arbitrary condition to bypass the authorization and continue on the chain. In
+            // the end spring will give it an "annonymous" user and will use that whenever
+            // it need to secure a resource. Example would be static resource that we
+            // "permitAll()". These request will also tigger this filter and hopefully the
+            // condition doesn't pass and we continue down the filter chain to get the
+            // "annonymous" user which can access static resourse because of "permitAll"
+            String key = request.getParameter("key");
+            if (key != null) {
+                UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken("name",
+                        "password");
 
-            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken("name",
-                    "password");
-
-            String username = authRequest.getName();
-            this.logger.trace(LogMessage.format("Found key '%s' header", username));
-            if (authenticationIsRequired(username)) {
-                Authentication authResult = getAuthenticationManager().authenticate(authRequest);
-                SecurityContext context = this.securityContextHolderStrategy.createEmptyContext();
-                context.setAuthentication(authResult);
-                this.securityContextHolderStrategy.setContext(context);
-                if (this.logger.isDebugEnabled()) {
-                    this.logger.debug(LogMessage.format("Set SecurityContextHolder to %s", authResult));
+                String username = authRequest.getName();
+                this.logger.trace(LogMessage.format("Found key '%s' header", username));
+                if (authenticationIsRequired(username)) {
+                    Authentication authResult = getAuthenticationManager().authenticate(authRequest);
+                    SecurityContext context = this.securityContextHolderStrategy.createEmptyContext();
+                    context.setAuthentication(authResult);
+                    this.securityContextHolderStrategy.setContext(context);
+                    if (this.logger.isDebugEnabled()) {
+                        this.logger.debug(LogMessage.format("Set SecurityContextHolder to %s", authResult));
+                    }
+                    this.rememberMeServices.loginSuccess(request, response, authResult);
+                    this.securityContextRepository.saveContext(context, request, response);
+                    onSuccessfulAuthentication(request, response, authResult);
                 }
-                this.rememberMeServices.loginSuccess(request, response, authResult);
-                this.securityContextRepository.saveContext(context, request, response);
-                onSuccessfulAuthentication(request, response, authResult);
             }
         } catch (AuthenticationException ex) {
             this.securityContextHolderStrategy.clearContext();
