@@ -1,0 +1,21 @@
+name: 'Hello World Action'
+description: 'A simple action that says hello'
+inputs:
+  name:
+    description: 'Who to greet'
+    required: true
+    default: 'World'
+outputs:
+  time:
+    description: 'The time we greeted you'
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name:
+      runs: |
+        echo "@@@@"
+        pwd
+        ls -la
