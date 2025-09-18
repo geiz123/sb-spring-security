@@ -36,6 +36,8 @@ jobs:
 
     - name: Call custom action
       uses: geiz123/sb-spring-security/.github/actions@main
+      with:
+        name: geiz123
       
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     #- name: Update dependency graph
