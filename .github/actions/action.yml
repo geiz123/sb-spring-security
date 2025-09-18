@@ -14,8 +14,10 @@ runs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name:
-      runs: |
-        echo "@@@@"
+    - name: Echo stuff
+      shell: bash
+      run: |
+        echo "@@@@ ${{ inputs.name }}"
         pwd
         ls -la
+
