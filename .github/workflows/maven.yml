@@ -35,7 +35,7 @@ jobs:
     #   run: mvn -B -Dmaven.test.skip=true package --file pom.xml
 
     - name: Call custom action
-      uses: geiz123/sb-spring-security@v1
+      uses: geiz123/sb-spring-security/.github/actions@main
       
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     #- name: Update dependency graph
