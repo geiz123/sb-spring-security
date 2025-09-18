@@ -20,5 +20,7 @@ runs:
         echo "@@@@ ${{ inputs.name }}"
         pwd
         ls -la
+        java -version
+
 
 
