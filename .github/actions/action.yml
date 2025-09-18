@@ -13,7 +13,12 @@ runs:
   steps:
     # - name: Checkout repository
     #   uses: actions/checkout@v4
-
+    - name: Install Java
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openjdk-21-jdk
+        
     - name: Echo stuff
       shell: bash
       run: |
@@ -22,6 +27,7 @@ runs:
         ls -la
         java -version
         mvn -version
+
 
 
 
